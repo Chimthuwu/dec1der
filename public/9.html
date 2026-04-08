@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 | Neo-Brutal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --hue: 280; /* Default Electric Purple */
+            --accent: hsl(var(--hue), 90%, 65%); 
+            --bg-tint: hsl(var(--hue), 90%, 95%);
+        }
+        
+        body { 
+            background-color: var(--bg-tint); 
+            background-image: radial-gradient(black 1px, transparent 1px);
+            background-size: 24px 24px;
+            color: #000; font-family: 'Epilogue', sans-serif; 
+            transition: background-color 0.3s ease;
+        }
+
+        /* Neo-Brutalist Card styling */
+        .neo-card {
+            background: #fff;
+            border: 4px solid #000;
+            box-shadow: 8px 8px 0px var(--accent);
+            transition: all 0.15s ease-out;
+            border-radius: 12px;
+        }
+        
+        .neo-card:hover {
+            transform: translate(4px, 4px);
+            box-shadow: 4px 4px 0px #000; /* Shadow turns black on press */
+            background: var(--accent);
+        }
+
+        .neo-button {
+            background: var(--accent); border: 4px solid #000;
+            box-shadow: 4px 4px 0px #000; font-weight: 900;
+            transition: all 0.1s; text-transform: uppercase;
+        }
+        .neo-button:active {
+            transform: translate(4px, 4px); box-shadow: 0px 0px 0px #000;
+        }
+
+        /* Slider */
+        .neo-slider-box {
+            position: fixed; top: 20px; right: 20px; z-index: 100;
+            background: #fff; border: 4px solid #000; box-shadow: 4px 4px 0px #000;
+            padding: 10px 15px; border-radius: 8px; display: flex; align-items: center; gap: 12px;
+        }
+        input[type=range] { -webkit-appearance: none; height: 8px; border: 2px solid #000; background: #fff; border-radius: 4px; width: 120px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; background: var(--accent); border: 3px solid #000; border-radius: 50%; cursor: pointer; }
+    </style>
+</head>
+<body class="p-6 md:p-12 min-h-screen flex flex-col items-center">
+
+    <!-- Neo Slider -->
+    <div class="neo-slider-box">
+        <span class="text-xs font-black uppercase">Color Vibe</span>
+        <input type="range" min="0" max="360" value="280" id="hueSlider">
+    </div>
+
+    <main class="w-full max-w-2xl relative z-10 mt-10">
+        
+        <!-- HEADER -->
+        <header class="neo-card p-8 mb-8 text-center bg-white hover:bg-white hover:shadow-[8px_8px_0px_#000] hover:transform-none cursor-default">
+            <div class="w-28 h-28 mx-auto mb-6 border-4 border-black rounded-full overflow-hidden shadow-[4px_4px_0px_#000] bg-white">
+                <img src="https://api.dicebear.com/7.x/notionists/svg?seed=404" class="w-full h-full object-cover">
+            </div>
+            <h1 class="text-6xl font-black uppercase tracking-tighter mb-2">404 BEATS</h1>
+            <p class="text-xl font-bold border-2 border-black inline-block px-4 py-1 rounded-full shadow-[2px_2px_0px_#000] bg-white">
+                Making the internet loud. 🧨
+            </p>
+        </header>
+
+        <!-- LINKS GRID -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <a href="#" class="neo-card p-6 flex flex-col items-center justify-center text-center group h-40">
+                <span class="text-4xl mb-2 group-hover:scale-125 transition-transform">🎧</span>
+                <h2 class="text-2xl font-black uppercase">Listen Now</h2>
+                <p class="font-bold text-sm">Spotify / Apple Music</p>
+            </a>
+
+            <a href="#" class="neo-card p-6 flex flex-col items-center justify-center text-center group h-40">
+                <span class="text-4xl mb-2 group-hover:scale-125 transition-transform">🥁</span>
+                <h2 class="text-2xl font-black uppercase">Sample Packs</h2>
+                <p class="font-bold text-sm">Royalty Free Loops</p>
+            </a>
+
+            <!-- FULL WIDTH LINK -->
+            <a href="#" class="neo-card p-6 flex items-center justify-between md:col-span-2 group">
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 border-4 border-black rounded-lg bg-white overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0">
+                    </div>
+                    <div>
+                        <span class="bg-black text-white text-[10px] font-black uppercase px-2 py-1 rounded">Latest Drop</span>
+                        <h2 class="text-3xl font-black uppercase mt-1">Glitch Theory EP</h2>
+                    </div>
+                </div>
+                <span class="text-4xl font-black hidden sm:block">→</span>
+            </a>
+            
+        </div>
+
+        <!-- FOOTER CTA -->
+        <div class="mt-12 text-center">
+            <button class="neo-button px-8 py-4 text-xl rounded-full">
+                Book Studio Time
+            </button>
+        </div>
+
+    </main>
+
+    <script>
+        document.getElementById('hueSlider').addEventListener('input', (e) => {
+            document.documentElement.style.setProperty('--hue', e.target.value);
+        });
+    </script>
+</body>
+</html>

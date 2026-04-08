@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 // CLASSIFIED FEED</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --hue: 120; /* Default Phosphor Green */
+            --phosphor: hsl(var(--hue), 100%, 60%); 
+        }
+        
+        body { 
+            background-color: #050505; color: var(--phosphor); 
+            font-family: 'Share Tech Mono', monospace; 
+            margin: 0; height: 100vh; overflow: hidden;
+            text-shadow: 0 0 5px var(--phosphor), 0 0 10px var(--phosphor);
+        }
+
+        /* CRT Screen Effects */
+        .crt-overlay {
+            position: fixed; inset: 0; pointer-events: none; z-index: 50;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 3px, 3px 100%;
+        }
+        
+        /* Slight screen flicker */
+        .flicker { animation: crt-flicker 0.15s infinite; }
+        @keyframes crt-flicker {
+            0% { opacity: 0.95; }
+            50% { opacity: 1; }
+            100% { opacity: 0.98; }
+        }
+
+        /* VHS Tracking Distortion line */
+        .tracking-line {
+            position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+            background: rgba(255,255,255,0.1); opacity: 0.5;
+            animation: track 8s linear infinite;
+        }
+        @keyframes track {
+            0% { top: -10%; }
+            100% { top: 110%; }
+        }
+
+        /* Terminal Links */
+        .crt-link {
+            display: block; width: 100%; padding: 15px; border: 1px solid transparent;
+            text-transform: uppercase; letter-spacing: 2px; transition: 0s; /* No smooth transition, raw cut */
+            cursor: crosshair;
+        }
+        .crt-link:hover {
+            background: var(--phosphor); color: #000;
+            text-shadow: none; font-weight: bold;
+        }
+
+        /* Hardware Slider */
+        .hardware-dial {
+            position: fixed; bottom: 30px; right: 30px; z-index: 100;
+            border: 2px solid var(--phosphor); padding: 10px; background: #000;
+        }
+        input[type=range] { -webkit-appearance: none; background: transparent; border-bottom: 2px dashed var(--phosphor); width: 150px; outline: none; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 20px; background: var(--phosphor); cursor: ew-resize; }
+    </style>
+</head>
+<body class="flicker p-8 relative flex flex-col">
+
+    <div class="crt-overlay"></div>
+    <div class="tracking-line"></div>
+
+    <!-- VCR OSD (On-Screen Display) -->
+    <div class="flex justify-between items-start w-full absolute top-8 left-8 right-8 pr-16 z-10 pointer-events-none">
+        <div class="flex items-center gap-4 text-2xl">
+            <span class="animate-pulse text-red-500" style="text-shadow: 0 0 10px red;">● REC</span>
+            <span>SP</span>
+        </div>
+        <div class="text-right text-xl">
+            <p>CH 04</p>
+            <p id="clock">00:00:00</p>
+        </div>
+    </div>
+
+    <!-- Hardware Dial Slider -->
+    <div class="hardware-dial">
+        <span class="block text-[10px] uppercase mb-2">Phosphor Tuning // Freq</span>
+        <input type="range" min="0" max="360" value="120" id="hueSlider">
+    </div>
+
+    <main class="w-full max-w-2xl mx-auto mt-32 relative z-10 flex-grow">
+        
+        <header class="mb-16">
+            <h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-2">> 404_SYS</h1>
+            <p class="text-xl">SYSTEM OVERRIDE ENGAGED. AUDIO FILES UNLOCKED.</p>
+        </header>
+
+        <div class="space-y-4">
+            <a href="#" class="crt-link flex justify-between">
+                <span>[01] EXECUTE_AUDIO.WAV</span>
+                <span class="opacity-50">STREAM</span>
+            </a>
+            <a href="#" class="crt-link flex justify-between">
+                <span>[02] DECRYPT_SAMPLES.ZIP</span>
+                <span class="opacity-50">DOWNLOAD</span>
+            </a>
+            <a href="#" class="crt-link flex justify-between">
+                <span>[03] VISUAL_RECORDS.MP4</span>
+                <span class="opacity-50">YOUTUBE</span>
+            </a>
+            <a href="#" class="crt-link flex justify-between">
+                <span>[04] ESTABLISH_COMM.BAT</span>
+                <span class="opacity-50">CONTACT</span>
+            </a>
+        </div>
+
+        <div class="mt-20 text-xs opacity-50">
+            <p>DIR: C:\USERS\404\VAULT</p>
+            <p>WARNING: UNAUTHORIZED DOWNLOADING STRICTLY PROHIBITED.</p>
+        </div>
+
+    </main>
+
+    <script>
+        // Update Hue
+        document.getElementById('hueSlider').addEventListener('input', (e) => {
+            document.documentElement.style.setProperty('--hue', e.target.value);
+        });
+
+        // VCR Clock
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('clock').innerText = 
+                String(now.getHours()).padStart(2, '0') + ':' + 
+                String(now.getMinutes()).padStart(2, '0') + ':' + 
+                String(now.getSeconds()).padStart(2, '0');
+        }, 1000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABYSSAL | Solo Project</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Cinzel:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --hue: 0; /* Default Blood Red */
+            --blood: hsl(var(--hue), 100%, 40%);
+            --blood-dark: hsl(var(--hue), 100%, 15%);
+        }
+        
+        body { 
+            background-color: #030303; 
+            color: #d1d1d1;
+            font-family: 'Cinzel', serif;
+            min-height: 100vh;
+            /* Gritty Grunge Background Texture */
+            background-image: 
+                radial-gradient(circle at center, transparent 0%, #000 100%),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+        }
+
+        .black-metal-logo {
+            font-family: 'UnifrakturMaguntia', cursive;
+            text-shadow: 0 0 10px var(--blood-dark), 0 0 20px var(--blood-dark);
+            transform: scaleY(1.3);
+            letter-spacing: -2px;
+        }
+
+        .iron-card {
+            background: #0a0a0a;
+            border: 1px solid #222;
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .iron-card::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transform: skewX(-20deg); transition: 0.5s;
+        }
+
+        .iron-card:hover {
+            border-color: var(--blood);
+            box-shadow: 0 0 15px var(--blood-dark), inset 0 0 20px rgba(0,0,0,0.8);
+            color: white;
+        }
+
+        .iron-card:hover::before { left: 200%; }
+
+        .iron-card:hover .icon-area { color: var(--blood); }
+
+        /* Creepy Slider */
+        .ritual-slider {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            border-top: 1px solid #333; border-bottom: 1px solid #333;
+            padding: 10px 20px; background: #000; z-index: 100;
+        }
+        input[type=range] { -webkit-appearance: none; width: 200px; height: 2px; background: #333; outline: none; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 6px; height: 16px; background: var(--blood); border: 1px solid #000; cursor: pointer; box-shadow: 0 0 8px var(--blood); }
+    </style>
+</head>
+<body class="p-6 md:p-12 flex flex-col items-center">
+
+    <!-- Corruption Slider -->
+    <div class="ritual-slider flex flex-col items-center gap-2">
+        <span class="text-[10px] tracking-[0.3em] uppercase text-gray-500">Sacrificial Tint</span>
+        <input type="range" min="0" max="360" value="0" id="hueSlider">
+    </div>
+
+    <main class="w-full max-w-lg mt-12 relative z-10 mb-24">
+        
+        <header class="text-center mb-16">
+            <div class="w-32 h-40 mx-auto mb-6 border border-[#222] p-1 bg-[#050505]">
+                <img src="https://api.dicebear.com/7.x/micah/svg?seed=404&backgroundColor=transparent" class="w-full h-full object-cover grayscale contrast-125 brightness-75">
+            </div>
+            
+            <h1 class="black-metal-logo text-6xl md:text-8xl text-white">404</h1>
+            <p class="mt-8 text-xs tracking-[0.4em] uppercase text-gray-500 border-t border-b border-[#222] inline-block py-2 px-8">
+                Atmospheric Black Metal
+            </p>
+        </header>
+
+        <div class="space-y-4">
+            <a href="#" class="iron-card flex items-center p-5 group">
+                <div class="icon-area text-2xl w-12 text-center text-gray-600 transition-colors">I.</div>
+                <div class="pl-4 border-l border-[#222] group-hover:border-[var(--blood)] transition-colors">
+                    <h2 class="text-xl font-bold tracking-widest uppercase">The Void Beckons</h2>
+                    <p class="text-[10px] tracking-[0.2em] text-gray-500 mt-1 uppercase">Listen on Bandcamp</p>
+                </div>
+            </a>
+
+            <a href="#" class="iron-card flex items-center p-5 group">
+                <div class="icon-area text-2xl w-12 text-center text-gray-600 transition-colors">II.</div>
+                <div class="pl-4 border-l border-[#222] group-hover:border-[var(--blood)] transition-colors">
+                    <h2 class="text-xl font-bold tracking-widest uppercase">Ritual Merch</h2>
+                    <p class="text-[10px] tracking-[0.2em] text-gray-500 mt-1 uppercase">Apparel & Cassettes</p>
+                </div>
+            </a>
+
+            <a href="#" class="iron-card flex items-center p-5 group">
+                <div class="icon-area text-2xl w-12 text-center text-gray-600 transition-colors">III.</div>
+                <div class="pl-4 border-l border-[#222] group-hover:border-[var(--blood)] transition-colors">
+                    <h2 class="text-xl font-bold tracking-widest uppercase">Summoning</h2>
+                    <p class="text-[10px] tracking-[0.2em] text-gray-500 mt-1 uppercase">Booking & Contact</p>
+                </div>
+            </a>
+        </div>
+
+    </main>
+
+    <script>
+        document.getElementById('hueSlider').addEventListener('input', (e) => {
+            document.documentElement.style.setProperty('--hue', e.target.value);
+        });
+    </script>
+</body>
+</html>

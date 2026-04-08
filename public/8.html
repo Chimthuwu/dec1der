@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 OS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root { --hue: 240; --os-accent: hsl(var(--hue), 80%, 40%); }
+        body { 
+            background: #008080; /* Classic Win95 Teal background */
+            background-image: radial-gradient(#005050 1px, transparent 1px);
+            background-size: 20px 20px;
+            font-family: 'VT323', monospace; color: #000; 
+            min-height: 100vh; overflow: hidden;
+        }
+
+        /* Classic 3D Bevels */
+        .window {
+            background: #c0c0c0;
+            border-top: 2px solid #fff; border-left: 2px solid #fff;
+            border-right: 2px solid #000; border-bottom: 2px solid #000;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+        
+        .title-bar {
+            background: var(--os-accent); color: white;
+            padding: 4px 8px; font-size: 1.2rem; display: flex; justify-content: space-between;
+        }
+
+        .btn-95 {
+            background: #c0c0c0;
+            border-top: 2px solid #fff; border-left: 2px solid #fff;
+            border-right: 2px solid #000; border-bottom: 2px solid #000;
+            padding: 4px 12px; cursor: pointer;
+        }
+        .btn-95:active {
+            border-top: 2px solid #000; border-left: 2px solid #000;
+            border-right: 2px solid #fff; border-bottom: 2px solid #fff;
+        }
+
+        .content-box {
+            background: #fff;
+            border-top: 2px solid #000; border-left: 2px solid #000;
+            border-right: 2px solid #fff; border-bottom: 2px solid #fff;
+            padding: 10px;
+        }
+
+        .link-item:hover { background: var(--os-accent); color: white; cursor: pointer; }
+
+        /* Taskbar */
+        .taskbar {
+            position: fixed; bottom: 0; width: 100%; background: #c0c0c0;
+            border-top: 2px solid #fff; padding: 4px; display: flex; justify-content: space-between; align-items: center;
+            z-index: 999;
+        }
+    </style>
+</head>
+<body class="p-4">
+
+    <!-- DESKTOP ICONS -->
+    <div class="absolute top-10 left-10 text-center text-white drop-shadow-md cursor-pointer group">
+        <div class="text-5xl group-hover:scale-110 transition-transform">💿</div>
+        <p class="text-xl mt-1 bg-os-accent group-hover:bg-[var(--os-accent)] px-1">Beats.exe</p>
+    </div>
+
+    <!-- MAIN PROFILE WINDOW -->
+    <main class="window max-w-sm mx-auto mt-20 relative z-10">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <span>C:\404\Profile.exe</span>
+            <div class="flex gap-1">
+                <div class="btn-95 px-2 py-0 text-black leading-none">_</div>
+                <div class="btn-95 px-2 py-0 text-black leading-none">X</div>
+            </div>
+        </div>
+
+        <!-- Window Content -->
+        <div class="p-4">
+            <div class="flex gap-4 mb-4">
+                <div class="w-20 h-20 border-2 border-black bg-white">
+                    <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=404" class="w-full h-full">
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold leading-none">404_PROD</h1>
+                    <p class="text-xl mt-1 text-gray-700">Level: Master</p>
+                    <p class="text-xl text-gray-700">Status: Online</p>
+                </div>
+            </div>
+
+            <div class="content-box mb-4">
+                <p class="text-lg">Welcome to my directory. Select an executable below to proceed.</p>
+            </div>
+
+            <!-- Links list inside the window -->
+            <div class="content-box p-0">
+                <a href="#" class="link-item block text-xl p-2 border-b border-gray-300">🎵 PLAY_LATEST_TRACK.wav</a>
+                <a href="#" class="link-item block text-xl p-2 border-b border-gray-300">🛒 BEAT_STORE_V2.exe</a>
+                <a href="#" class="link-item block text-xl p-2 border-b border-gray-300">📸 INSTAGRAM.com</a>
+                <a href="#" class="link-item block text-xl p-2">✉️ EMAIL_CONTACT.bat</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- TASKBAR (With Hue Slider built in as "Display Settings") -->
+    <div class="taskbar">
+        <div class="btn-95 text-xl font-bold flex items-center gap-2">
+            <span class="text-blue-600">❖</span> START
+        </div>
+        
+        <!-- OS Theme Controller -->
+        <div class="flex items-center gap-2 border-l-2 border-r-2 border-gray-500 px-4">
+            <span class="text-lg">OS Theme:</span>
+            <input type="range" min="0" max="360" value="240" id="hueSlider" class="w-24 h-1 bg-gray-700 rounded-full appearance-none cursor-pointer outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-[var(--accent)] [&::-webkit-slider-thumb]:rounded-full">
+        </div>
+
+        <div class="content-box py-1 px-4 text-lg">
+            04:04 PM
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('hueSlider').addEventListener('input', (e) => {
+            document.documentElement.style.setProperty('--hue', e.target.value);
+        });
+    </script>
+</body>
+</html>

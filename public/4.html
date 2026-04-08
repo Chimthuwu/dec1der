@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 | PUNK ROCK</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Special+Elite&display=swap" rel="stylesheet">
+    <style>
+        :root { --hue: 300; --accent: hsl(var(--hue), 100%, 50%); }
+        body { 
+            background-color: #111; 
+            background-image: repeating-linear-gradient(45deg, #181818 25%, transparent 25%, transparent 75%, #181818 75%, #181818), repeating-linear-gradient(45deg, #181818 25%, #111 25%, #111 75%, #181818 75%, #181818);
+            background-position: 0 0, 10px 10px; background-size: 20px 20px;
+            color: #eee; font-family: 'Special Elite', monospace; 
+        }
+        
+        .torn-paper {
+            background: #e5e5e5; color: #111; position: relative;
+            clip-path: polygon(1% 0, 100% 2%, 98% 100%, 0 98%, 3% 50%);
+            transition: transform 0.1s;
+        }
+        .torn-paper:hover { transform: scale(1.05) rotate(-2deg); }
+        
+        .tape {
+            position: absolute; width: 100px; height: 30px; background: rgba(255,255,255,0.3);
+            backdrop-filter: blur(2px); transform: rotate(-5deg); top: -10px; left: 50%; margin-left: -50px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+        }
+
+        .marker-font { font-family: 'Permanent Marker', cursive; }
+        .text-accent { color: var(--accent); }
+    </style>
+</head>
+<body class="p-6 flex flex-col items-center justify-center min-h-screen">
+
+    <!-- HUE SLIDER (AMP KNOB VIBE) -->
+    <div class="fixed bottom-6 left-6 z-[100] bg-[#222] p-4 border-2 border-black shadow-[4px_4px_0_var(--accent)] transform -rotate-2">
+        <label class="block marker-font text-xl text-accent mb-2">SPRAY PAINT COLOR</label>
+        <input type="range" min="0" max="360" value="300" id="hueSlider" class="w-full h-2 bg-black appearance-none cursor-pointer outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:rounded-full">
+    </div>
+
+    <main class="max-w-md w-full relative z-10 mt-10">
+        <header class="text-center mb-16 transform rotate-2">
+            <h1 class="marker-font text-8xl text-white drop-shadow-[5px_5px_0_var(--accent)]">404!</h1>
+            <h2 class="text-xl bg-black inline-block px-2 text-white transform -rotate-3 mt-4">NOISE / FEEDBACK / DRUMS</h2>
+        </header>
+
+        <div class="space-y-8">
+            <a href="#" class="block torn-paper p-6 text-center group">
+                <div class="tape"></div>
+                <h3 class="marker-font text-3xl group-hover:text-accent transition-colors">LISTEN TO THE DEMO</h3>
+                <p class="mt-2 text-sm font-bold">CASSETTE RIP [HQ]</p>
+            </a>
+
+            <a href="#" class="block torn-paper p-6 text-center group transform -rotate-1">
+                <div class="tape" style="transform: rotate(4deg); right: -10px; left: auto;"></div>
+                <h3 class="marker-font text-3xl group-hover:text-accent transition-colors">TOUR DATES</h3>
+                <p class="mt-2 text-sm font-bold">BASEMENT SHOWS ONLY</p>
+            </a>
+
+            <a href="#" class="block torn-paper p-6 text-center group transform rotate-1">
+                <div class="tape" style="transform: rotate(-8deg); left: 10px;"></div>
+                <h3 class="marker-font text-3xl group-hover:text-accent transition-colors">BUY MERCH</h3>
+                <p class="mt-2 text-sm font-bold">UGLY SHIRTS / PATCHES</p>
+            </a>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('hueSlider').addEventListener('input', (e) => {
+            document.documentElement.style.setProperty('--hue', e.target.value);
+        });
+    </script>
+</body>
+</html>

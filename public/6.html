@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xXx_404_GAMER_xXx</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root { --hue: 240; --bg-color: hsl(var(--hue), 100%, 50%); }
+        body { 
+            background-color: var(--bg-color); 
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+            color: yellow; font-family: 'Comic Sans MS', 'Comic Sans', cursive; 
+            text-align: center; overflow-x: hidden;
+            cursor: wait; /* extremely annoying cursor */
+        }
+        
+        .deep-fried {
+            border: 8px ridge lime;
+            background: magenta;
+            box-shadow: 10px 10px 0px cyan, -10px -10px 0px red;
+            transition: 0.1s;
+        }
+        .deep-fried:hover { background: yellow; color: red; transform: scale(1.1) rotate(5deg); }
+
+        .spinny-boy { animation: spin 0.5s linear infinite; display: inline-block; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        .rainbow-text {
+            background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+            -webkit-background-clip: text; color: transparent; font-weight: 900; font-size: 3rem;
+            animation: blink 0.5s infinite;
+        }
+        @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+        /* Hideous Slider */
+        .cursed-slider {
+            position: fixed; top: 10px; width: 100%; z-index: 9999; text-align: center;
+        }
+        input[type=range] { width: 80%; height: 30px; background: red; border: 5px solid yellow; }
+    </style>
+</head>
+<body class="p-4">
+
+    <!-- HUE SLIDER (BRAINROT STYLE) -->
+    <div class="cursed-slider">
+        <marquee scrollamount="20" class="bg-black text-white text-2xl font-black uppercase">!!! WARNING: SLIDE AT YOUR OWN RISK !!!</marquee>
+        <input type="range" min="0" max="360" value="240" id="hueSlider" class="w-24 h-1 bg-gray-600 rounded-full appearance-none cursor-pointer outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:rounded-full">
+    </div>
+
+    <main class="max-w-lg mx-auto mt-24">
+        
+        <header class="mb-10">
+            <h1 class="rainbow-text"><span class="spinny-boy">🔥</span> 404 DA GOAT <span class="spinny-boy">🔥</span></h1>
+            <marquee direction="right" scrollamount="15" class="text-3xl bg-blue-600 border-y-4 border-yellow-400 my-4 text-white">
+                IM THE GREATEST ALIVE 💯💯💯 NO CAP FR FR
+            </marquee>
+        </header>
+
+        <div class="w-48 h-48 mx-auto mb-10 border-[10px] border-dotted border-red-500 rounded-full overflow-hidden animate-bounce">
+            <!-- Stupid stock image -->
+            <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=200&q=80" style="filter: contrast(300%) saturate(300%);">
+        </div>
+
+        <div class="flex flex-col gap-6 font-black text-2xl">
+            <a href="#" class="deep-fried p-4 block text-white">
+                <span class="spinny-boy">💀</span> MY SOUNDCLOUD <span class="spinny-boy">💀</span>
+                <p class="text-sm font-normal">(please listen my mom said it was good)</p>
+            </a>
+
+            <a href="#" class="deep-fried p-4 block text-white">
+                <span class="spinny-boy">💰</span> BUY MY BEATS <span class="spinny-boy">💰</span>
+                <p class="text-sm font-normal">ONLY $999.99</p>
+            </a>
+
+            <a href="#" class="deep-fried p-4 block text-white">
+                <span class="spinny-boy">📱</span> TIKTOK DANCES <span class="spinny-boy">📱</span>
+            </a>
+        </div>
+
+        <div class="mt-20">
+            <img src="https://media.giphy.com/media/l41YcWb51FEX1sX9m/giphy.gif" width="100" class="mx-auto">
+            <p class="bg-black text-lime-500 mt-2 font-mono text-sm">Hit counter: 0000042069</p>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('hueSlider').addEventListener('input', (e) => {
+            document.documentElement.style.setProperty('--hue', e.target.value);
+        });
+    </script>
+</body>
+</html>
