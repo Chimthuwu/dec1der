@@ -50,14 +50,14 @@ function DeadTree({ position }: { position: [number, number, number] }) {
         </mesh>
       ))}
       
-      {/* Gnarled Branches */}
-      {[...Array(8)].map((_, i) => (
+      {/* Gnarled/Broken Branches */}
+      {[...Array(10)].map((_, i) => (
         <group 
           key={`branch-group-${i}`}
           position={[
-            Math.sin(i) * 0.3, 
+            Math.sin(i) * 0.5, 
             2 + Math.random() * (height - 2), 
-            Math.cos(i) * 0.3
+            Math.cos(i) * 0.5
           ]}
           rotation={[
             Math.random() * Math.PI,
@@ -66,14 +66,16 @@ function DeadTree({ position }: { position: [number, number, number] }) {
           ]}
         >
           <mesh>
-            <cylinderGeometry args={[0.01, 0.05, 1.5, 4]} />
+            <cylinderGeometry args={[0.01, 0.05, 1 + Math.random() * 1, 4]} />
             <meshStandardMaterial color="#1a1a1a" flatShading />
           </mesh>
-          {/* Sub-branch */}
-          <mesh position={[0, 0.5, 0]} rotation={[0.5, 0, 0]}>
-            <cylinderGeometry args={[0.005, 0.02, 0.8, 3]} />
-            <meshStandardMaterial color="#1a1a1a" flatShading />
-          </mesh>
+          {/* Broken stub */}
+          {Math.random() > 0.5 && (
+            <mesh position={[0, 0.5, 0]} rotation={[0.5, 0, 0]}>
+              <boxGeometry args={[0.05, 0.2, 0.05]} />
+              <meshStandardMaterial color="#1a1a1a" flatShading />
+            </mesh>
+          )}
         </group>
       ))}
     </group>
@@ -116,6 +118,25 @@ function RuneSymbol({ position }: { position: [number, number, number] }) {
   );
 }
 
+function Volcano({ position }: { position: [number, number, number] }) {
+  return (
+    <group position={position}>
+      <mesh>
+        <coneGeometry args={[10, 15, 8]} />
+        <meshStandardMaterial color="#2a2a2a" flatShading />
+      </mesh>
+      {/* Crater Glow */}
+      <mesh position={[0, 7.5, 0]}>
+        <coneGeometry args={[3, 2, 8]} />
+        <meshStandardMaterial color="#ff4400" emissive="#ff4400" emissiveIntensity={5} flatShading />
+      </mesh>
+      <pointLight position={[0, 8, 0]} color="#ff4400" intensity={15} distance={40} />
+      {/* Smoke */}
+      <Sparkles count={50} scale={5} size={6} speed={0.2} color="#444444" position={[0, 9, 0]} />
+    </group>
+  );
+}
+
 function Wilderness() {
   return (
     <group>
@@ -125,9 +146,13 @@ function Wilderness() {
         <meshStandardMaterial color="#0a0a0a" roughness={1} flatShading />
       </mesh>
       
+      {/* Volcanoes */}
+      <Volcano position={[30, 0, -30]} />
+      <Volcano position={[-40, 0, -20]} />
+
       {/* Gnarled Dead Trees */}
-      {[...Array(25)].map((_, i) => (
-        <DeadTree key={i} position={[Math.random() * 60 - 30, 0, Math.random() * 60 - 30]} />
+      {[...Array(50)].map((_, i) => (
+        <DeadTree key={i} position={[Math.random() * 80 - 40, 0, Math.random() * 80 - 40]} />
       ))}
 
       {/* Pulsing Rune Symbols */}
@@ -348,8 +373,49 @@ function Varrock() {
         <meshStandardMaterial color="#3a3a3a" roughness={1} flatShading />
       </mesh>
 
+      {/* Central Gate */}
+      <group position={[0, 0, -10]}>
+        <mesh position={[-5, 5, 0]}>
+          <boxGeometry args={[2, 10, 2]} />
+          <meshStandardMaterial color="#555555" flatShading />
+        </mesh>
+        <mesh position={[5, 5, 0]}>
+          <boxGeometry args={[2, 10, 2]} />
+          <meshStandardMaterial color="#555555" flatShading />
+        </mesh>
+        <mesh position={[0, 10, 0]}>
+          <boxGeometry args={[12, 2, 2]} />
+          <meshStandardMaterial color="#555555" flatShading />
+        </mesh>
+      </group>
+
+      {/* Buildings */}
+      {[...Array(15)].map((_, i) => {
+        const x = (i % 5) * 15 - 30;
+        const z = Math.floor(i / 5) * 15 - 30;
+        return (
+          <group key={`building-${i}`} position={[x, 4, z]}>
+            {/* Main body */}
+            <mesh>
+              <boxGeometry args={[6, 8 + Math.random() * 4, 6]} />
+              <meshStandardMaterial color="#4a4a4a" flatShading />
+            </mesh>
+            {/* Roof */}
+            <mesh position={[0, 5, 0]}>
+              <coneGeometry args={[4.5, 3, 4]} />
+              <meshStandardMaterial color="#333333" flatShading />
+            </mesh>
+            {/* Windows */}
+            <mesh position={[0, 1, 3.1]}>
+              <boxGeometry args={[1, 1.5, 0.1]} />
+              <meshStandardMaterial color="#111111" />
+            </mesh>
+          </group>
+        );
+      })}
+
       {/* Fountain */}
-      <group position={[0, 0, 0]}>
+      <group position={[0, 0, 10]}>
         <mesh position={[0, 0.2, 0]}>
           <cylinderGeometry args={[4, 4, 0.5, 8]} />
           <meshStandardMaterial color="#424242" flatShading />
