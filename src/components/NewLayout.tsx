@@ -11,24 +11,25 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
     if (!collageContainer) return;
 
     const defaultFLImages = [
-      "fl/3c0f3e38c41334a48bf30f976fd6a8d8.gif",
-      "fl/5371b8b4dfe0d0cb90fd183d5d3f86961110525c.gif",
-      "fl/7be028109172735.5fce415e9b989.png",
-      "fl/998128a7817eda0ccd650feef29c76a9a96b4a62.gif",
-      "fl/Zp91BY.gif",
-      "fl/ewtfolylzza41.gif",
-      "fl/giphy.gif",
-      "fl/i-turned-all-the-fl-chan-animations-into-loopable-gifs-v0-vpduzuo6pfve1.gif",
-      "fl/kTJ00t.gif",
-      "fl/synthesizer-modular.gif"
+      "fl/1.gif",
+      "fl/2.gif",
+      "fl/3.png",
+      "fl/5.gif",
+      "fl/6.gif",
+      "fl/7.gif",
+      "fl/8.gif",
+      "fl/9.gif",
+      "fl/10.gif",
+      "fl/11.gif"
     ];
 
     function resolvePath(path: string) {
-      // Try to handle potential base path issues
-      const base = window.location.pathname.endsWith('/') ? window.location.pathname : window.location.pathname + '/';
-      // If path starts with /, remove it for relative resolution
-      const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-      return '/' + cleanPath;
+      if (!path) return '';
+      // Ensure path starts with /
+      const cleanPath = path.startsWith('/') ? path : '/' + path;
+      // Use window.location.origin to ensure absolute URL if needed, 
+      // but usually root-relative / is best for SPAs
+      return cleanPath;
     }
 
     function buildCollage(imageUrls: string[]) {
@@ -68,12 +69,12 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
 
     // --- 2. GNOME PFP CYCLER ---
     const gnomes = [
-      "gnome/pain-dank.gif",
-      "gnome/200w.gif",
-      "gnome/download.gif",
-      "gnome/giphy_2.gif",
-      "gnome/ina3hi02spp21.gif",
-      "gnome/tumblr_nabhp30Tmo1tjw4imo1_250.gif"
+      "gnome/5.gif", // pain-dank.gif
+      "gnome/1.gif", // 200w.gif
+      "gnome/2.gif", // download.gif
+      "gnome/3.gif", // giphy_2.gif
+      "gnome/4.gif", // ina3hi02spp21.gif
+      "gnome/6.gif"  // tumblr_nabhp30Tmo1tjw4imo1_250.gif
     ];
     let gnomeIndex = 0;
     let gnomeTimeout: NodeJS.Timeout;
@@ -85,12 +86,12 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
         pfpRef.current.src = url;
       }
       
-      const duration = gnomes[gnomeIndex].includes('pain-dank.gif') ? 500 : 7000;
+      const duration = gnomes[gnomeIndex].includes('5.gif') ? 500 : 7000;
       gnomeTimeout = setTimeout(cycleGnome, duration);
     };
 
-    // Initial timeout should respect the first image (pain-dank.gif)
-    const initialDuration = gnomes[0].includes('pain-dank.gif') ? 500 : 7000;
+    // Initial timeout should respect the first image (5.gif)
+    const initialDuration = gnomes[0].includes('5.gif') ? 500 : 7000;
     gnomeTimeout = setTimeout(cycleGnome, initialDuration);
 
     // --- 4. KONAMI CODE ---
@@ -133,9 +134,8 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
             <img 
               ref={pfpRef} 
               id="gnome-pfp" 
-              src="/gnome/pain-dank.gif" 
+              src="/gnome/5.gif" 
               className="w-full h-full object-cover" 
-              referrerPolicy="no-referrer"
               onError={(e) => console.error("Failed to load PFP:", (e.target as HTMLImageElement).src)}
             />
             <div className="absolute inset-0 bg-black bg-opacity-80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-crosshair">
@@ -154,10 +154,15 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
           <a href="https://www.youtube.com/@deciderosrs" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center">
             <span className="text-6xl mb-4">🪓</span>
             <h2 className="text-2xl font-black">OSRS CLIPS</h2>
-            <p className="text-[9px] mt-2 text-[#0f0]">NO STOOGES ALLOWED</p>
+            <p className="text-[9px] mt-2 text-[#0f0]">NO MERCY FOR STOOGES</p>
           </a>
           <a href="https://open.spotify.com/artist/0epG7kZFRpxaRchGf6p5yE" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center"><span className="text-6xl mb-4">🎵</span><h2 className="text-2xl font-black">SPOTIFY</h2></a>
           <a href="https://dec1der.bandcamp.com/" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center"><span className="text-6xl mb-4">💿</span><h2 className="text-2xl font-black">BANDCAMP</h2></a>
+          <a href="https://store.steampowered.com/app/2781990/Hell_On_Earth/" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center">
+            <span className="text-6xl mb-4">🔥</span>
+            <h2 className="text-2xl font-black">HELL ON EARTH</h2>
+            <p className="text-[9px] mt-2 text-[#0f0]">SOUND DESIGN BY DEC1DER</p>
+          </a>
           <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center md:col-span-2 bg-[#111]" style={{borderColor: '#ec4899', boxShadow: '10px 10px 0 #ec4899'}}>
             <span className="text-6xl mb-4">📸</span>
             <h2 className="text-2xl font-black text-pink-500">ONLYFANS</h2>
