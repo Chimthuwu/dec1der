@@ -11,10 +11,16 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
     if (!collageContainer) return;
 
     const defaultFLImages = [
-      "/FL%20STUDIO/Zp91BY.gif",
-      "/FL%20STUDIO/kTJ00t.gif",
+      "/FL%20STUDIO/3c0f3e38c41334a48bf30f976fd6a8d8.gif",
+      "/FL%20STUDIO/5371b8b4dfe0d0cb90fd183d5d3f86961110525c.gif",
+      "/FL%20STUDIO/7be028109172735.5fce415e9b989.png",
       "/FL%20STUDIO/998128a7817eda0ccd650feef29c76a9a96b4a62.gif",
-      "/FL%20STUDIO/i-turned-all-the-fl-chan-animations-into-loopable-gifs-v0-vpduzuo6pfve1.gif"
+      "/FL%20STUDIO/Zp91BY.gif",
+      "/FL%20STUDIO/ewtfolylzza41.gif",
+      "/FL%20STUDIO/giphy.gif",
+      "/FL%20STUDIO/i-turned-all-the-fl-chan-animations-into-loopable-gifs-v0-vpduzuo6pfve1.gif",
+      "/FL%20STUDIO/kTJ00t.gif",
+      "/FL%20STUDIO/synthesizer-modular.gif"
     ];
 
     function buildCollage(imageUrls: string[]) {
