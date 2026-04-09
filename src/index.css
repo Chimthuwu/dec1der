@@ -1,1 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @import "tailwindcss";
+
+/* Insane Animations */
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+@keyframes yilmaz-spin { 
+    100% { transform: rotate(360deg) scale(0.8); filter: hue-rotate(180deg) invert(1); } 
+}
+@keyframes rgb-border {
+    0% { border-color: #0f0; box-shadow: 10px 10px 0 #0f0; }
+    33% { border-color: #f0f; box-shadow: 10px 10px 0 #f0f; }
+    66% { border-color: #0ff; box-shadow: 10px 10px 0 #0ff; }
+    100% { border-color: #0f0; box-shadow: 10px 10px 0 #0f0; }
+}
+
+/* Collage specific animations */
+@keyframes float-collage {
+    0% { transform: translate(-5vw, -5vh) rotate(-2deg) scale(1); }
+    100% { transform: translate(-1vw, -2vh) rotate(2deg) scale(1.1); }
+}
+@keyframes pulse-opacity {
+    0% { opacity: 0.5; filter: saturate(1) hue-rotate(0deg); }
+    100% { opacity: 0.9; filter: saturate(2) hue-rotate(45deg); }
+}
+
+body {
+    background: #000;
+    font-family: 'Press Start 2P', system-ui;
+    color: #fff; 
+    overflow-x: hidden;
+}
+
+/* The dynamic collage grid */
+.collage-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    grid-auto-rows: 160px;
+    gap: 12px;
+    width: 140vw;
+    height: 140vh;
+    animation: float-collage 30s infinite alternate ease-in-out;
+    position: absolute;
+    top: -20vh;
+    left: -20vw;
+    z-index: 1;
+}
+
+.collage-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid rgba(0, 255, 0, 0.8);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+    animation: pulse-opacity 4s infinite alternate ease-in-out;
+    background: #111;
+    transition: transform 0.3s ease;
+}
+
+.collage-container img:hover {
+    transform: scale(1.1) rotate(0deg) !important;
+    z-index: 10;
+    border-color: #0f0;
+    box-shadow: 0 0 25px rgba(0, 255, 0, 0.6);
+}
+
+/* Smooth scrolling meme carousel */
+.carousel-track {
+    display: flex;
+    width: max-content;
+    animation: scroll 20s linear infinite;
+}
+.carousel-track:hover {
+    animation-play-state: paused;
+}
+
+.pfp { 
+    border: 8px solid #0f0; 
+    box-shadow: 0 0 20px #0f0; 
+    transition: transform 0.2s;
+}
+.pfp:hover {
+    transform: scale(1.05) rotate(-5deg);
+}
+
+.neo-card {
+    background: #1a1a1a; border: 6px solid #0f0;
+    box-shadow: 10px 10px 0 #0f0; transition: all 0.15s;
+    position: relative;
+    z-index: 10;
+}
+.neo-card:hover { transform: translate(5px, 5px); box-shadow: 0 0 0 0 #0f0; }
+.header { text-shadow: 4px 4px #0f0; }
+
+.yilmaz-mode {
+    animation: yilmaz-spin 3s linear infinite !important;
+}
+.yilmaz-mode .neo-card {
+    animation: rgb-border 1s linear infinite !important;
+}

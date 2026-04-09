@@ -3,6 +3,66 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import * as THREE from "three";
 import { motion, AnimatePresence } from "motion/react";
 import { Stars, Float, Text, Environment, Sparkles } from "@react-three/drei";
+import { GoogleGenAI, Modality } from "@google/genai";
+
+// --- AI Voice Helper ---
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+let audioContext: AudioContext | null = null;
+
+async function playAIVoice(text: string) {
+  try {
+    if (!audioContext) {
+      audioContext = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
+    }
+    
+    if (audioContext.state === 'suspended') {
+      await audioContext.resume();
+    }
+
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash-preview-tts",
+      contents: [{ parts: [{ text: `Say in a deep, legendary, epic narrator voice: ${text}` }] }],
+      config: {
+        responseModalities: [Modality.AUDIO],
+        speechConfig: {
+          voiceConfig: {
+            prebuiltVoiceConfig: { voiceName: 'Charon' },
+          },
+        },
+      },
+    });
+
+    const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+    if (!base64Audio) {
+      console.warn("AI Voice: No audio data received (likely quota limit or safety filter). Skipping voice.");
+      return;
+    }
+
+    const audioData = atob(base64Audio);
+    const arrayBuffer = new ArrayBuffer(audioData.length);
+    const view = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < audioData.length; i++) {
+      view[i] = audioData.charCodeAt(i);
+    }
+
+    try {
+      const buffer = await audioContext.decodeAudioData(arrayBuffer);
+      const source = audioContext.createBufferSource();
+      source.buffer = buffer;
+      source.connect(audioContext.destination);
+      source.start(0);
+    } catch (decodeError) {
+      console.warn("AI Voice: Unable to decode audio data. Skipping voice.", decodeError);
+    }
+  } catch (error: any) {
+    // Handle quota errors (429) silently or with a simple warning
+    if (error?.message?.includes('429') || error?.status === 'RESOURCE_EXHAUSTED') {
+      console.warn("AI Voice: Quota exceeded. The intro will continue without narration.");
+    } else {
+      console.warn("AI Voice Error:", error?.message || error);
+    }
+  }
+}
 
 // --- Types ---
 interface SceneProps {
@@ -10,6 +70,62 @@ interface SceneProps {
 }
 
 // --- Environments ---
+
+function Scorpion({ position }: { position: [number, number, number] }) {
+  return (
+    <group position={position}>
+      <mesh position={[0, 0.2, 0]}>
+        <boxGeometry args={[0.5, 0.3, 0.8]} />
+        <meshStandardMaterial color="#d4a373" />
+      </mesh>
+      <mesh position={[0, 0.5, 0.4]} rotation={[0.5, 0, 0]}>
+        <cylinderGeometry args={[0.05, 0.1, 0.6]} />
+        <meshStandardMaterial color="#d4a373" />
+      </mesh>
+    </group>
+  );
+}
+
+function Miner({ position }: { position: [number, number, number] }) {
+  return (
+    <group position={position}>
+      <mesh position={[0, 0.5, 0]}>
+        <boxGeometry args={[0.3, 0.8, 0.3]} />
+        <meshStandardMaterial color="#555555" />
+      </mesh>
+      <mesh position={[0.3, 0.6, 0]}>
+        <boxGeometry args={[0.4, 0.1, 0.1]} />
+        <meshStandardMaterial color="#aaaaaa" />
+      </mesh>
+    </group>
+  );
+}
+
+function Goblin({ position }: { position: [number, number, number] }) {
+  return (
+    <group position={position}>
+      <mesh position={[0, 0.4, 0]}>
+        <boxGeometry args={[0.3, 0.6, 0.3]} />
+        <meshStandardMaterial color="#2d5a27" />
+      </mesh>
+    </group>
+  );
+}
+
+function Woodcutter({ position }: { position: [number, number, number] }) {
+  return (
+    <group position={position}>
+      <mesh position={[0, 0.5, 0]}>
+        <boxGeometry args={[0.3, 0.8, 0.3]} />
+        <meshStandardMaterial color="#5d4037" />
+      </mesh>
+      <mesh position={[0.3, 0.6, 0]}>
+        <boxGeometry args={[0.3, 0.1, 0.1]} />
+        <meshStandardMaterial color="#a67c52" />
+      </mesh>
+    </group>
+  );
+}
 
 function DeadTree({ position }: { position: [number, number, number] }) {
   const segments = 6;
@@ -140,24 +256,45 @@ function Volcano({ position }: { position: [number, number, number] }) {
 function Wilderness() {
   return (
     <group>
-      {/* Dark Ground */}
+      {/* Grass Ground (Like Lumbridge) */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
         <planeGeometry args={[100, 100]} />
-        <meshStandardMaterial color="#0a0a0a" roughness={1} flatShading />
+        <meshStandardMaterial color="#3a7d44" roughness={1} flatShading />
       </mesh>
       
-      {/* Volcanoes */}
-      <Volcano position={[30, 0, -30]} />
-      <Volcano position={[-40, 0, -20]} />
+      {/* Big Volcano with Red/Orange Lava */}
+      <group position={[0, 0, -20]}>
+        <mesh>
+          <coneGeometry args={[15, 20, 8]} />
+          <meshStandardMaterial color="#2a2a2a" flatShading />
+        </mesh>
+        {/* Crater Lava */}
+        <mesh position={[0, 10, 0]}>
+          <cylinderGeometry args={[4, 4, 0.5, 8]} />
+          <meshStandardMaterial color="#ff4400" emissive="#ff4400" emissiveIntensity={10} />
+        </mesh>
+        {/* Lava Flows */}
+        {[...Array(4)].map((_, i) => (
+          <mesh key={`lava-${i}`} position={[Math.sin(i * Math.PI / 2) * 5, 5, Math.cos(i * Math.PI / 2) * 5]} rotation={[0.5, i * Math.PI / 2, 0]}>
+            <boxGeometry args={[1, 12, 0.2]} />
+            <meshStandardMaterial color="#ff6600" emissive="#ff4400" emissiveIntensity={5} />
+          </mesh>
+        ))}
+        <pointLight position={[0, 12, 0]} color="#ff4400" intensity={20} distance={50} />
+        <Sparkles count={100} scale={10} size={8} speed={0.5} color="#ff4400" position={[0, 12, 0]} />
+      </group>
 
-      {/* Gnarled Dead Trees */}
-      {[...Array(50)].map((_, i) => (
-        <DeadTree key={i} position={[Math.random() * 80 - 40, 0, Math.random() * 80 - 40]} />
+      {/* Sprites in Wildy */}
+      {[...Array(8)].map((_, i) => (
+        <Goblin key={`wildy-goblin-${i}`} position={[Math.random() * 40 - 20, 0, Math.random() * 40 - 20]} />
+      ))}
+      {[...Array(5)].map((_, i) => (
+        <Scorpion key={`wildy-scorpion-${i}`} position={[Math.random() * 30 - 15, -0.4, Math.random() * 30 - 15]} />
       ))}
 
-      {/* Pulsing Rune Symbols */}
-      {[...Array(15)].map((_, i) => (
-        <RuneSymbol key={`rune-${i}`} position={[Math.random() * 50 - 25, -0.48, Math.random() * 50 - 25]} />
+      {/* Gnarled Dead Trees */}
+      {[...Array(30)].map((_, i) => (
+        <DeadTree key={i} position={[Math.random() * 80 - 40, 0, Math.random() * 80 - 40]} />
       ))}
 
       {/* Bone Piles */}
@@ -168,18 +305,13 @@ function Wilderness() {
         </mesh>
       ))}
 
-      {/* Dark Altar */}
-      <group position={[0, 0, -5]}>
-        <mesh position={[0, 0.5, 0]}>
-          <boxGeometry args={[2, 1, 2]} />
-          <meshStandardMaterial color="#2a2a2a" flatShading />
+      {/* Rocks */}
+      {[...Array(20)].map((_, i) => (
+        <mesh key={`rock-${i}`} position={[Math.random() * 60 - 30, -0.4, Math.random() * 60 - 30]}>
+          <dodecahedronGeometry args={[0.5 + Math.random()]} />
+          <meshStandardMaterial color="#333333" flatShading />
         </mesh>
-        <mesh position={[0, 1.1, 0]}>
-          <boxGeometry args={[1.8, 0.1, 1.8]} />
-          <meshStandardMaterial color="#8a2be2" emissive="#8a2be2" emissiveIntensity={2} />
-        </mesh>
-        <pointLight position={[0, 2, 0]} color="#8a2be2" intensity={5} distance={10} />
-      </group>
+      ))}
 
       <Sparkles count={100} scale={30} size={2} speed={0.5} color="#4b0082" />
     </group>
@@ -232,6 +364,16 @@ function AlKharid() {
           <meshStandardMaterial color="#a67c52" flatShading />
         </mesh>
       </group>
+
+      {/* Scorpions - More prominent */}
+      {[...Array(15)].map((_, i) => (
+        <Scorpion key={`scorpion-${i}`} position={[Math.random() * 30 - 15, -0.4, Math.random() * 30 - 15]} />
+      ))}
+
+      {/* Miners */}
+      {[...Array(5)].map((_, i) => (
+        <Miner key={`miner-${i}`} position={[Math.random() * 30 - 15, 0, Math.random() * 30 - 15]} />
+      ))}
 
       <pointLight position={[10, 15, 10]} color="#ffcc00" intensity={4} />
       <Environment preset="sunset" />
@@ -358,6 +500,16 @@ function Lumbridge() {
         </group>
       ))}
 
+      {/* Goblins */}
+      {[...Array(10)].map((_, i) => (
+        <Goblin key={`goblin-${i}`} position={[Math.random() * 40 - 20, 0, Math.random() * 40 - 20]} />
+      ))}
+
+      {/* Woodcutters */}
+      {[...Array(5)].map((_, i) => (
+        <Woodcutter key={`woodcutter-${i}`} position={[Math.random() * 30 - 15, 0, Math.random() * 30 - 15]} />
+      ))}
+
       <Sparkles count={150} scale={40} size={1} speed={0.2} color="#ffffff" />
       <directionalLight position={[10, 20, 10]} intensity={1.5} color="#ffffff" />
     </group>
@@ -467,20 +619,60 @@ function Varrock() {
 function FinalScene() {
   return (
     <group>
-      <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-        <mesh>
-          <torusKnotGeometry args={[1.5, 0.4, 128, 16]} />
-          <meshStandardMaterial 
-            color="#ffaa00" 
-            emissive="#ffaa00" 
-            emissiveIntensity={2} 
-            metalness={1} 
-            roughness={0} 
-          />
+      {/* Stone Ground */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
+        <planeGeometry args={[50, 50]} />
+        <meshStandardMaterial color="#2a2a2a" roughness={1} flatShading />
+      </mesh>
+
+      {/* OSRS Style Login Screen Pillars */}
+      <group position={[0, 0, -5]}>
+        {/* Left Pillar */}
+        <group position={[-6, 0, 0]}>
+          <mesh position={[0, 4, 0]}>
+            <boxGeometry args={[1.5, 8, 1.5]} />
+            <meshStandardMaterial color="#444444" flatShading />
+          </mesh>
+          <mesh position={[0, 8.2, 0]}>
+            <boxGeometry args={[2, 0.5, 2]} />
+            <meshStandardMaterial color="#333333" flatShading />
+          </mesh>
+          {/* Fire */}
+          <mesh position={[0, 8.8, 0]}>
+            <sphereGeometry args={[0.4, 8, 8]} />
+            <meshStandardMaterial color="#ff4400" emissive="#ff4400" emissiveIntensity={5} />
+          </mesh>
+          <pointLight position={[0, 9, 0]} color="#ff4400" intensity={10} distance={15} />
+          <Sparkles count={30} scale={1} size={4} speed={0.5} color="#ff4400" position={[0, 9, 0]} />
+        </group>
+
+        {/* Right Pillar */}
+        <group position={[6, 0, 0]}>
+          <mesh position={[0, 4, 0]}>
+            <boxGeometry args={[1.5, 8, 1.5]} />
+            <meshStandardMaterial color="#444444" flatShading />
+          </mesh>
+          <mesh position={[0, 8.2, 0]}>
+            <boxGeometry args={[2, 0.5, 2]} />
+            <meshStandardMaterial color="#333333" flatShading />
+          </mesh>
+          {/* Fire */}
+          <mesh position={[0, 8.8, 0]}>
+            <sphereGeometry args={[0.4, 8, 8]} />
+            <meshStandardMaterial color="#ff4400" emissive="#ff4400" emissiveIntensity={5} />
+          </mesh>
+          <pointLight position={[0, 9, 0]} color="#ff4400" intensity={10} distance={15} />
+          <Sparkles count={30} scale={1} size={4} speed={0.5} color="#ff4400" position={[0, 9, 0]} />
+        </group>
+
+        {/* Archway */}
+        <mesh position={[0, 8.5, 0]}>
+          <boxGeometry args={[14, 1, 1.5]} />
+          <meshStandardMaterial color="#333333" flatShading />
         </mesh>
-      </Float>
+      </group>
+
       <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-      <pointLight position={[0, 0, 0]} color="#ffaa00" intensity={5} distance={20} />
     </group>
   );
 }
@@ -494,8 +686,7 @@ function SceneManager({ sceneIndex }: SceneProps) {
         {sceneIndex === 0 && <Wilderness />}
         {sceneIndex === 1 && <AlKharid />}
         {sceneIndex === 2 && <Lumbridge />}
-        {sceneIndex === 3 && <Varrock />}
-        {sceneIndex === 4 && <FinalScene />}
+        {sceneIndex === 3 && <FinalScene />}
       </group>
     </AnimatePresence>
   );
@@ -510,7 +701,6 @@ function CameraRig({ sceneIndex }: SceneProps) {
     { pos: [0, 4, 15], look: [0, 0, -10] },    // Wilderness
     { pos: [15, 6, 15], look: [-5, 0, -5] },   // Al Kharid
     { pos: [0, 5, 20], look: [0, 5, -10] },    // Lumbridge
-    { pos: [-10, 8, 15], look: [5, 0, -5] },   // Varrock
     { pos: [0, 0, 8], look: [0, 0, 0] }        // Final
   ], []);
 
@@ -528,18 +718,19 @@ function CameraRig({ sceneIndex }: SceneProps) {
 
 // --- Main Component ---
 
-export default function CinematicIntro({ onComplete }: { onComplete: () => void }) {
+export default function CinematicIntro({ onComplete }: { onComplete: (useMusic: boolean) => void }) {
   const [sceneIndex, setSceneIndex] = useState(0);
   const [text, setText] = useState("");
   const [isFinished, setIsFinished] = useState(false);
+  const [showMusicPrompt, setShowMusicPrompt] = useState(false);
 
   const scenes = useMemo(() => [
-    { text: "Deep in the wilderness...", duration: 6000 },
     { text: "Beyond the burning sands of Al Kharid...", duration: 6000 },
     { text: "Past the quiet fields of Lumbridge...", duration: 6000 },
-    { text: "Through the shadows of Varrock...", duration: 6000 },
-    { text: "And in that moment...", duration: 3000 },
-    { text: "A decision was made.", duration: 4000 }
+    { text: "Deep in the wilderness, where fire meets earth...", duration: 6000 },
+    { text: "Legends foretold of 1 man who would dec1de the fate of the universe...", duration: 6000 },
+    { text: "His name was...", duration: 3000 },
+    { text: "Dec1der.", duration: 4000 }
   ], []);
 
   useEffect(() => {
@@ -548,29 +739,39 @@ export default function CinematicIntro({ onComplete }: { onComplete: () => void 
 
     const run = async () => {
       if (i < scenes.length) {
-        setText(scenes[i].text);
+        const currentText = scenes[i].text;
+        setText(currentText);
+        
+        // Play AI Voice for the current text
+        playAIVoice(currentText);
         
         // Map text index to visual scene index
-        if (i < 4) setSceneIndex(i);
-        else setSceneIndex(4);
+        if (i === 0) setSceneIndex(1); // Al Kharid
+        else if (i === 1) setSceneIndex(2); // Lumbridge
+        else if (i === 2) setSceneIndex(0); // Wilderness
+        else setSceneIndex(3); // Final
 
         timeout = setTimeout(() => {
           i++;
           run();
         }, scenes[i].duration);
       } else {
-        setIsFinished(true);
-        setTimeout(onComplete, 1000);
+        setShowMusicPrompt(true);
       }
     };
 
     run();
     return () => clearTimeout(timeout);
-  }, [scenes, onComplete]);
+  }, [scenes]);
+
+  const handleMusicChoice = (choice: boolean) => {
+    setIsFinished(true);
+    setTimeout(() => onComplete(choice), 1000);
+  };
 
   const handleSkip = () => {
     setIsFinished(true);
-    onComplete();
+    onComplete(true);
   };
 
   return (
@@ -591,18 +792,44 @@ export default function CinematicIntro({ onComplete }: { onComplete: () => void 
       {/* TEXT OVERLAY */}
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none px-6">
         <AnimatePresence mode="wait">
-          <motion.h2
-            key={text}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            className={`text-3xl md:text-5xl font-serif text-amber-100 text-center tracking-widest drop-shadow-[0_0_15px_rgba(251,191,36,0.5)] ${
-              text === "A decision was made." ? "text-6xl md:text-8xl font-black uppercase" : ""
-            }`}
-          >
-            {text}
-          </motion.h2>
+          {!showMusicPrompt ? (
+            <motion.h2
+              key={text}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
+              className={`text-3xl md:text-5xl font-serif text-amber-100 text-center tracking-widest drop-shadow-[0_0_15px_rgba(251,191,36,0.5)] ${
+                text === "Dec1der." ? "text-6xl md:text-8xl font-black uppercase" : ""
+              }`}
+            >
+              {text}
+            </motion.h2>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex flex-col items-center gap-8 pointer-events-auto"
+            >
+              <h2 className="text-3xl md:text-5xl font-serif text-amber-100 text-center tracking-widest drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]">
+                And now you must dec1de...<br />Do you like music?
+              </h2>
+              <div className="flex gap-6">
+                <button 
+                  onClick={() => handleMusicChoice(true)}
+                  className="px-8 py-3 bg-amber-100 text-black font-bold rounded-full hover:bg-white transition-all scale-110"
+                >
+                  YES
+                </button>
+                <button 
+                  onClick={() => handleMusicChoice(false)}
+                  className="px-8 py-3 border-2 border-amber-100 text-amber-100 font-bold rounded-full hover:bg-amber-100/10 transition-all"
+                >
+                  NO
+                </button>
+              </div>
+            </motion.div>
+          )}
         </AnimatePresence>
       </div>
 
@@ -616,6 +843,17 @@ export default function CinematicIntro({ onComplete }: { onComplete: () => void 
 
       {/* VIGNETTE */}
       <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_150px_rgba(0,0,0,1)]" />
+
+      {/* YOUTUBE BACKGROUND AUDIO (HIDDEN) */}
+      <div className="fixed -top-[1000px] left-0 opacity-0 pointer-events-none">
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/kFTDohuCFic?autoplay=1&mute=0&controls=0&loop=1&playlist=kFTDohuCFic"
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        ></iframe>
+      </div>
     </motion.div>
   );
 }

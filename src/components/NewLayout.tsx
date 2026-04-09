@@ -1,0 +1,169 @@
+import { useEffect, useRef } from 'react';
+import { Play } from 'lucide-react';
+
+export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void }) {
+  const collageContainerRef = useRef<HTMLDivElement>(null);
+  const pfpRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    // --- 1. DYNAMIC FL STUDIO BACKGROUND COLLAGE ---
+    const collageContainer = collageContainerRef.current;
+    if (!collageContainer) return;
+
+    const defaultFLImages = [
+      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/FL%20STUDIO/Zp91BY.gif",
+      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/FL%20STUDIO/kTJ00t.gif",
+      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/FL%20STUDIO/998128a7817eda0ccd650feef29c76a9a96b4a62.gif",
+      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/FL%20STUDIO/i-turned-all-the-fl-chan-animations-into-loopable-gifs-v0-vpduzuo6pfve1.gif"
+    ];
+
+    function buildCollage(imageUrls: string[]) {
+      if (!collageContainer || imageUrls.length === 0) return;
+      collageContainer.innerHTML = ''; // Clear existing
+      
+      let images = [...imageUrls];
+      // Increase count to fill a large grid (e.g., 150-200 images)
+      const targetCount = 150;
+      while (images.length < targetCount && images.length > 0) {
+        images = images.concat(images);
+      }
+      images.sort(() => Math.random() - 0.5);
+      images.slice(0, targetCount).forEach(url => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.referrerPolicy = "no-referrer";
+        img.style.animationDelay = (Math.random() * 4) + 's';
+        
+        // Randomly make some images larger for a "collage" feel
+        if (Math.random() > 0.8) {
+          img.style.gridColumn = 'span 2';
+          if (Math.random() > 0.5) img.style.gridRow = 'span 2';
+        }
+        
+        // Add random rotation
+        img.style.transform = `rotate(${(Math.random() - 0.5) * 10}deg)`;
+        
+        collageContainer.appendChild(img);
+      });
+    }
+
+    fetch('https://api.github.com/repos/Chimthuwu/dec1der/contents/public/FL%20STUDIO')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          const liveImages = data
+            .filter(file => file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i))
+            .map(file => file.download_url);
+          if (liveImages.length > 0) {
+            buildCollage(liveImages);
+            return;
+          }
+        }
+        buildCollage(defaultFLImages);
+      })
+      .catch(() => buildCollage(defaultFLImages));
+
+    // --- 2. GNOME PFP CYCLER ---
+    const gnomes = [
+      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/RUNESCAPEGNOME/pain-dank.gif",
+      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/RUNESCAPEGNOME/200w.gif",
+      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/RUNESCAPEGNOME/download.gif",
+      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/RUNESCAPEGNOME/giphy%20(2).gif",
+      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/RUNESCAPEGNOME/ina3hi02spp21.gif",
+      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/RUNESCAPEGNOME/tumblr_nabhp30Tmo1tjw4imo1_250.gif"
+    ];
+    let gnomeIndex = 0;
+    let gnomeTimeout: NodeJS.Timeout;
+
+    const cycleGnome = () => {
+      gnomeIndex = (gnomeIndex + 1) % gnomes.length;
+      if (pfpRef.current) pfpRef.current.src = gnomes[gnomeIndex];
+      
+      const duration = gnomes[gnomeIndex].includes('pain-dank.gif') ? 500 : 7000;
+      gnomeTimeout = setTimeout(cycleGnome, duration);
+    };
+
+    // Initial timeout should respect the first image (pain-dank.gif)
+    const initialDuration = gnomes[0].includes('pain-dank.gif') ? 500 : 7000;
+    gnomeTimeout = setTimeout(cycleGnome, initialDuration);
+
+    // --- 4. KONAMI CODE ---
+    const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let konamiIndex = 0;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === konamiCode[konamiIndex] || e.key.toLowerCase() === konamiCode[konamiIndex]) {
+            konamiIndex++;
+            if (konamiIndex === konamiCode.length) {
+                document.body.classList.add('yilmaz-mode');
+                konamiIndex = 0;
+            }
+        } else {
+            konamiIndex = 0;
+        }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      clearTimeout(gnomeTimeout);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 relative font-['Press_Start_2P',system-ui]">
+      {/* DYNAMIC FL STUDIO COLLAGE BACKGROUND */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-black">
+        <div ref={collageContainerRef} id="fl-collage" className="collage-container"></div>
+        <div className="absolute inset-0 bg-black/20 z-[2]"></div>
+      </div>
+
+      <main className="max-w-4xl w-full z-20 mt-10 flex-grow">
+        <div className="flex flex-col items-center mb-12 relative">
+          <div id="secret-pixel" className="absolute top-0 right-0 w-4 h-4 cursor-crosshair hover:bg-[#0f0] transition-colors" title="Don't click this, stooge."></div>
+
+          {/* GNOME CYCLING PFP */}
+          <div className="w-64 h-64 mb-6 pfp rounded-3xl overflow-hidden bg-black relative group">
+            <img ref={pfpRef} id="gnome-pfp" src="https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/RUNESCAPEGNOME/pain-dank.gif" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+            <div className="absolute inset-0 bg-black bg-opacity-80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-crosshair">
+              <p className="text-[10px] text-center text-[#0f0] leading-loose">↑ ↑ ↓ ↓<br />← → ← →<br />B A</p>
+            </div>
+          </div>
+
+          <h1 className="header text-5xl md:text-7xl font-black tracking-[-4px] text-center">DEC1DER</h1>
+          <p className="text-sm md:text-xl mt-3 text-[#0f0] text-center">FL STUDIO • RUNESCAPE • PURE CHAOS</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+          <a href="https://www.twitch.tv/thedec1der" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center"><span className="text-6xl mb-4">📺</span><h2 className="text-2xl font-black">TWITCH</h2></a>
+          <a href="https://soundcloud.com/thedec1der" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center"><span className="text-6xl mb-4">🔊</span><h2 className="text-2xl font-black">SOUNDCLOUD</h2></a>
+          <a href="https://www.youtube.com/channel/UCBiYLb34CcObDfZqgm3cj2Q" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center"><span className="text-6xl mb-4">📼</span><h2 className="text-2xl font-black">YT MAIN</h2></a>
+          <a href="https://www.youtube.com/@deciderosrs" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center">
+            <span className="text-6xl mb-4">🪓</span>
+            <h2 className="text-2xl font-black">OSRS CLIPS</h2>
+            <p className="text-[9px] mt-2 text-[#0f0]">NO STOOGES ALLOWED</p>
+          </a>
+          <a href="https://open.spotify.com/artist/0epG7kZFRpxaRchGf6p5yE" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center"><span className="text-6xl mb-4">🎵</span><h2 className="text-2xl font-black">SPOTIFY</h2></a>
+          <a href="https://dec1der.bandcamp.com/" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center"><span className="text-6xl mb-4">💿</span><h2 className="text-2xl font-black">BANDCAMP</h2></a>
+          <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center md:col-span-2 bg-[#111]" style={{borderColor: '#ec4899', boxShadow: '10px 10px 0 #ec4899'}}>
+            <span className="text-6xl mb-4">📸</span>
+            <h2 className="text-2xl font-black text-pink-500">ONLYFANS</h2>
+            <p className="text-[10px] mt-2 text-pink-300">PREMIUM YILMAZ CONTENT INSIDE (18+)</p>
+          </a>
+        </div>
+      </main>
+
+      <div className="mt-8 mb-4 text-center text-[#0f0] text-[10px] font-black z-20 flex flex-col items-center gap-4">
+        <p>GNOMES CYCLE IN PFP • LIVE FL STUDIO COLLAGE • DON'T BE A STOOGE</p>
+      </div>
+
+      {/* FLOATING REPLAY BUTTON */}
+      <button 
+        onClick={onReplayIntro}
+        className="fixed top-6 right-6 z-[100] flex items-center gap-2 px-6 py-3 bg-black border-2 border-[#0f0] text-[#0f0] font-black text-xs hover:bg-[#0f0] hover:text-black transition-all rounded-xl shadow-[5px_5px_0_#0f0] active:translate-x-1 active:translate-y-1 active:shadow-none"
+      >
+        <Play className="w-4 h-4 fill-current" /> REPLAY INTRO
+      </button>
+    </div>
+  );
+}
