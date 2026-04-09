@@ -11,10 +11,10 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
     if (!collageContainer) return;
 
     const defaultFLImages = [
-      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/FL%20STUDIO/Zp91BY.gif",
-      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/FL%20STUDIO/kTJ00t.gif",
-      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/FL%20STUDIO/998128a7817eda0ccd650feef29c76a9a96b4a62.gif",
-      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/FL%20STUDIO/i-turned-all-the-fl-chan-animations-into-loopable-gifs-v0-vpduzuo6pfve1.gif"
+      "/FL%20STUDIO/Zp91BY.gif",
+      "/FL%20STUDIO/kTJ00t.gif",
+      "/FL%20STUDIO/998128a7817eda0ccd650feef29c76a9a96b4a62.gif",
+      "/FL%20STUDIO/i-turned-all-the-fl-chan-animations-into-loopable-gifs-v0-vpduzuo6pfve1.gif"
     ];
 
     function buildCollage(imageUrls: string[]) {
@@ -47,30 +47,17 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
       });
     }
 
-    fetch('https://api.github.com/repos/Chimthuwu/dec1der/contents/public/FL%20STUDIO')
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          const liveImages = data
-            .filter(file => file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i))
-            .map(file => file.download_url);
-          if (liveImages.length > 0) {
-            buildCollage(liveImages);
-            return;
-          }
-        }
-        buildCollage(defaultFLImages);
-      })
-      .catch(() => buildCollage(defaultFLImages));
+    // Force use local images
+    buildCollage(defaultFLImages);
 
     // --- 2. GNOME PFP CYCLER ---
     const gnomes = [
-      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/RUNESCAPEGNOME/pain-dank.gif",
-      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/RUNESCAPEGNOME/200w.gif",
-      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/RUNESCAPEGNOME/download.gif",
-      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/RUNESCAPEGNOME/giphy%20(2).gif",
-      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/RUNESCAPEGNOME/ina3hi02spp21.gif",
-      "https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/RUNESCAPEGNOME/tumblr_nabhp30Tmo1tjw4imo1_250.gif"
+      "/RUNESCAPEGNOME/pain-dank.gif",
+      "/RUNESCAPEGNOME/200w.gif",
+      "/RUNESCAPEGNOME/download.gif",
+      "/RUNESCAPEGNOME/giphy (2).gif",
+      "/RUNESCAPEGNOME/ina3hi02spp21.gif",
+      "/RUNESCAPEGNOME/tumblr_nabhp30Tmo1tjw4imo1_250.gif"
     ];
     let gnomeIndex = 0;
     let gnomeTimeout: NodeJS.Timeout;
@@ -124,7 +111,7 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
 
           {/* GNOME CYCLING PFP */}
           <div className="w-64 h-64 mb-6 pfp rounded-3xl overflow-hidden bg-black relative group">
-            <img ref={pfpRef} id="gnome-pfp" src="https://raw.githubusercontent.com/Chimthuwu/dec1der/main/public/RUNESCAPEGNOME/pain-dank.gif" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+            <img ref={pfpRef} id="gnome-pfp" src="/RUNESCAPEGNOME/pain-dank.gif" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-black bg-opacity-80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-crosshair">
               <p className="text-[10px] text-center text-[#0f0] leading-loose">↑ ↑ ↓ ↓<br />← → ← →<br />B A</p>
             </div>

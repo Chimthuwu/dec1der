@@ -63,9 +63,9 @@ export default function MusicPlayer({ autoPlay = false }: { autoPlay?: boolean }
 
   return (
     <motion.div 
-      initial={{ y: 100, opacity: 0 }}
+      initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="fixed bottom-24 left-6 z-[60] w-72 bg-black/90 backdrop-blur-xl border-2 border-[#0f0] rounded-2xl p-4 shadow-[0_0_20px_rgba(0,255,0,0.3)]"
+      className="fixed top-6 left-6 z-[60] w-72 bg-black/90 backdrop-blur-xl border-2 border-[#0f0] rounded-2xl p-4 shadow-[0_0_20px_rgba(0,255,0,0.3)]"
     >
       <audio 
         ref={audioRef}
