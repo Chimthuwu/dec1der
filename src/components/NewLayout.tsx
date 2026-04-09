@@ -11,16 +11,16 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
     if (!collageContainer) return;
 
     const defaultFLImages = [
-      "FL_STUDIO/3c0f3e38c41334a48bf30f976fd6a8d8.gif",
-      "FL_STUDIO/5371b8b4dfe0d0cb90fd183d5d3f86961110525c.gif",
-      "FL_STUDIO/7be028109172735.5fce415e9b989.png",
-      "FL_STUDIO/998128a7817eda0ccd650feef29c76a9a96b4a62.gif",
-      "FL_STUDIO/Zp91BY.gif",
-      "FL_STUDIO/ewtfolylzza41.gif",
-      "FL_STUDIO/giphy.gif",
-      "FL_STUDIO/i-turned-all-the-fl-chan-animations-into-loopable-gifs-v0-vpduzuo6pfve1.gif",
-      "FL_STUDIO/kTJ00t.gif",
-      "FL_STUDIO/synthesizer-modular.gif"
+      "/FL_STUDIO/3c0f3e38c41334a48bf30f976fd6a8d8.gif",
+      "/FL_STUDIO/5371b8b4dfe0d0cb90fd183d5d3f86961110525c.gif",
+      "/FL_STUDIO/7be028109172735.5fce415e9b989.png",
+      "/FL_STUDIO/998128a7817eda0ccd650feef29c76a9a96b4a62.gif",
+      "/FL_STUDIO/Zp91BY.gif",
+      "/FL_STUDIO/ewtfolylzza41.gif",
+      "/FL_STUDIO/giphy.gif",
+      "/FL_STUDIO/i-turned-all-the-fl-chan-animations-into-loopable-gifs-v0-vpduzuo6pfve1.gif",
+      "/FL_STUDIO/kTJ00t.gif",
+      "/FL_STUDIO/synthesizer-modular.gif"
     ];
 
     function buildCollage(imageUrls: string[]) {
@@ -39,6 +39,7 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
         const img = document.createElement('img');
         img.src = url;
         img.referrerPolicy = "no-referrer";
+        img.onerror = () => console.error("Failed to load image:", url);
         img.style.animationDelay = (Math.random() * 4) + 's';
         
         // Randomly make some images larger for a "collage" feel
@@ -59,12 +60,12 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
 
     // --- 2. GNOME PFP CYCLER ---
     const gnomes = [
-      "RUNESCAPE_GNOME/pain-dank.gif",
-      "RUNESCAPE_GNOME/200w.gif",
-      "RUNESCAPE_GNOME/download.gif",
-      "RUNESCAPE_GNOME/giphy_2.gif",
-      "RUNESCAPE_GNOME/ina3hi02spp21.gif",
-      "RUNESCAPE_GNOME/tumblr_nabhp30Tmo1tjw4imo1_250.gif"
+      "/RUNESCAPE_GNOME/pain-dank.gif",
+      "/RUNESCAPE_GNOME/200w.gif",
+      "/RUNESCAPE_GNOME/download.gif",
+      "/RUNESCAPE_GNOME/giphy_2.gif",
+      "/RUNESCAPE_GNOME/ina3hi02spp21.gif",
+      "/RUNESCAPE_GNOME/tumblr_nabhp30Tmo1tjw4imo1_250.gif"
     ];
     let gnomeIndex = 0;
     let gnomeTimeout: NodeJS.Timeout;
@@ -118,7 +119,14 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
 
           {/* GNOME CYCLING PFP */}
           <div className="w-64 h-64 mb-6 pfp rounded-3xl overflow-hidden bg-black relative group">
-            <img ref={pfpRef} id="gnome-pfp" src="RUNESCAPE_GNOME/pain-dank.gif" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+            <img 
+              ref={pfpRef} 
+              id="gnome-pfp" 
+              src="/RUNESCAPE_GNOME/pain-dank.gif" 
+              className="w-full h-full object-cover" 
+              referrerPolicy="no-referrer"
+              onError={(e) => console.error("Failed to load PFP:", (e.target as HTMLImageElement).src)}
+            />
             <div className="absolute inset-0 bg-black bg-opacity-80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-crosshair">
               <p className="text-[10px] text-center text-[#0f0] leading-loose">↑ ↑ ↓ ↓<br />← → ← →<br />B A</p>
             </div>
