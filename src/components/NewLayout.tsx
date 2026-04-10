@@ -47,7 +47,6 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
       images.slice(0, targetCount).forEach(url => {
         const img = document.createElement('img');
         img.src = resolvePath(url);
-        img.referrerPolicy = "no-referrer";
         img.onerror = () => console.error("Failed to load image:", resolvePath(url));
         img.style.animationDelay = (Math.random() * 4) + 's';
         
@@ -158,6 +157,7 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
           </a>
           <a href="https://open.spotify.com/artist/0epG7kZFRpxaRchGf6p5yE" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center"><span className="text-6xl mb-4">🎵</span><h2 className="text-2xl font-black">SPOTIFY</h2></a>
           <a href="https://dec1der.bandcamp.com/" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center"><span className="text-6xl mb-4">💿</span><h2 className="text-2xl font-black">BANDCAMP</h2></a>
+          <a href="https://www.instagram.com/thedec1der/" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center"><span className="text-6xl mb-4">📷</span><h2 className="text-2xl font-black">INSTAGRAM</h2></a>
           <a href="https://store.steampowered.com/app/2781990/Hell_On_Earth/" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center">
             <span className="text-6xl mb-4">🔥</span>
             <h2 className="text-2xl font-black">HELL ON EARTH</h2>
