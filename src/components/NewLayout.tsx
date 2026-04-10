@@ -138,7 +138,13 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
               id="gnome-pfp" 
               src="/gnome/5.gif" 
               className="w-full h-full object-cover" 
-              onError={(e) => console.error("Failed to load PFP:", (e.target as HTMLImageElement).src)}
+              onError={(e) => {
+                console.error("Failed to load PFP:", (e.target as HTMLImageElement).src);
+                // Try fallback to absolute path if relative fails
+                if (!(e.target as HTMLImageElement).src.includes(window.location.origin)) {
+                   (e.target as HTMLImageElement).src = window.location.origin + "/gnome/5.gif";
+                }
+              }}
             />
             <div className="absolute inset-0 bg-black bg-opacity-80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-crosshair">
               <p className="text-[10px] text-center text-[#0f0] leading-loose">↑ ↑ ↓ ↓<br />← → ← →<br />B A</p>
