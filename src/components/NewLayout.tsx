@@ -10,24 +10,25 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
     const collageContainer = collageContainerRef.current;
     if (!collageContainer) return;
 
+    // Added the full list of files from your public/fl/ folder for MAX CHAOS
     const defaultFLImages = [
-      "fl/1.gif",
-      "fl/2.gif",
-      "fl/3.png",
-      "fl/5.gif",
-      "fl/6.gif",
-      "fl/7.gif",
-      "fl/8.gif",
-      "fl/9.gif",
-      "fl/10.gif",
-      "fl/11.gif"
+      "fl/1.gif", "fl/2.gif", "fl/3.png", "fl/5.gif", "fl/6.gif", "fl/7.gif", "fl/8.gif", "fl/9.gif", "fl/10.gif", "fl/11.gif",
+      "fl/3c0f3e38c41334a48bf30f976fd6a8d8.gif", 
+      "fl/5371b8b4dfe0d0cb90fd183d5d3f86961110525c.gif", 
+      "fl/7be028109172735.5fce415e9b989.png", 
+      "fl/998128a7817eda0ccd650feef29c76a9a96b4a62.gif",
+      "fl/ewtfolylzza41.gif", 
+      "fl/giphy.gif", 
+      "fl/i-turned-all-the-fl-chan-animations-into-loopable-gifs-v0-vpduzuo6pfve1.gif",
+      "fl/kTJ00t.gif", 
+      "fl/synthesizer-modular.gif", 
+      "fl/Zp91BY.gif"
     ];
 
     function resolvePath(path: string) {
       if (!path) return '';
-      // Ensure path starts with / for absolute root-relative resolution
-      const cleanPath = path.startsWith('/') ? path : '/' + path;
-      return cleanPath;
+      // Ensure path starts with / for absolute root-relative resolution in Cloudflare Pages
+      return path.startsWith('/') ? path : '/' + path;
     }
 
     function buildCollage(imageUrls: string[]) {
