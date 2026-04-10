@@ -25,10 +25,8 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
 
     function resolvePath(path: string) {
       if (!path) return '';
-      // Ensure path starts with /
-      const cleanPath = path.startsWith('/') ? path : '/' + path;
-      // Use window.location.origin to ensure absolute URL if needed, 
-      // but usually root-relative / is best for SPAs
+      // Remove leading slash if it exists to make it a relative path
+      const cleanPath = path.startsWith('/') ? path.slice(1) : path;
       return cleanPath;
     }
 
