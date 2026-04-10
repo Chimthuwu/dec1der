@@ -25,8 +25,8 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
 
     function resolvePath(path: string) {
       if (!path) return '';
-      // Remove leading slash if it exists to make it a relative path
-      const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+      // Ensure path starts with / for absolute root-relative resolution
+      const cleanPath = path.startsWith('/') ? path : '/' + path;
       return cleanPath;
     }
 
