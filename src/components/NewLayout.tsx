@@ -91,6 +91,10 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
     const initialDuration = gnomes[0].includes('5.gif') ? 500 : 7000;
     gnomeTimeout = setTimeout(cycleGnome, initialDuration);
 
+    if (pfpRef.current) {
+      pfpRef.current.src = resolvePath(gnomes[0]);
+    }
+
     // --- 4. KONAMI CODE ---
     const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
     let konamiIndex = 0;
