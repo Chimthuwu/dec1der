@@ -11,16 +11,16 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
     if (!collageContainer) return;
 
     const defaultFLImages = [
-      "/FL%20STUDIO/3c0f3e38c41334a48bf30f976fd6a8d8.gif",
-      "/FL%20STUDIO/5371b8b4dfe0d0cb90fd183d5d3f86961110525c.gif",
-      "/FL%20STUDIO/7be028109172735.5fce415e9b989.png",
-      "/FL%20STUDIO/998128a7817eda0ccd650feef29c76a9a96b4a62.gif",
-      "/FL%20STUDIO/Zp91BY.gif",
-      "/FL%20STUDIO/ewtfolylzza41.gif",
-      "/FL%20STUDIO/giphy.gif",
-      "/FL%20STUDIO/i-turned-all-the-fl-chan-animations-into-loopable-gifs-v0-vpduzuo6pfve1.gif",
-      "/FL%20STUDIO/kTJ00t.gif",
-      "/FL%20STUDIO/synthesizer-modular.gif"
+      "/fl-studio/3c0f3e38c41334a48bf30f976fd6a8d8.gif",
+      "/fl-studio/5371b8b4dfe0d0cb90fd183d5d3f86961110525c.gif",
+      "/fl-studio/7be028109172735.5fce415e9b989.png",
+      "/fl-studio/998128a7817eda0ccd650feef29c76a9a96b4a62.gif",
+      "/fl-studio/Zp91BY.gif",
+      "/fl-studio/ewtfolylzza41.gif",
+      "/fl-studio/giphy.gif",
+      "/fl-studio/i-turned-all-the-fl-chan-animations-into-loopable-gifs-v0-vpduzuo6pfve1.gif",
+      "/fl-studio/kTJ00t.gif",
+      "/fl-studio/synthesizer-modular.gif"
     ];
 
     function buildCollage(imageUrls: string[]) {
@@ -58,12 +58,12 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
 
     // --- 2. GNOME PFP CYCLER ---
     const gnomes = [
-      "/RUNESCAPEGNOME/pain-dank.gif",
-      "/RUNESCAPEGNOME/200w.gif",
-      "/RUNESCAPEGNOME/download.gif",
-      "/RUNESCAPEGNOME/giphy (2).gif",
-      "/RUNESCAPEGNOME/ina3hi02spp21.gif",
-      "/RUNESCAPEGNOME/tumblr_nabhp30Tmo1tjw4imo1_250.gif"
+      "/runescape-gnome/pain-dank.gif",
+      "/runescape-gnome/200w.gif",
+      "/runescape-gnome/download.gif",
+      "/runescape-gnome/giphy-2.gif",
+      "/runescape-gnome/ina3hi02spp21.gif",
+      "/runescape-gnome/tumblr_nabhp30Tmo1tjw4imo1_250.gif"
     ];
     let gnomeIndex = 0;
     let gnomeTimeout: NodeJS.Timeout;
@@ -117,7 +117,7 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
 
           {/* GNOME CYCLING PFP */}
           <div className="w-64 h-64 mb-6 pfp rounded-3xl overflow-hidden bg-black relative group">
-            <img ref={pfpRef} id="gnome-pfp" src="/RUNESCAPEGNOME/pain-dank.gif" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+            <img ref={pfpRef} id="gnome-pfp" src="/runescape-gnome/pain-dank.gif" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-black bg-opacity-80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-crosshair">
               <p className="text-[10px] text-center text-[#0f0] leading-loose">↑ ↑ ↓ ↓<br />← → ← →<br />B A</p>
             </div>

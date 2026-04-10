@@ -3,65 +3,12 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import * as THREE from "three";
 import { motion, AnimatePresence } from "motion/react";
 import { Stars, Float, Text, Environment, Sparkles } from "@react-three/drei";
-import { GoogleGenAI, Modality } from "@google/genai";
 
 // --- AI Voice Helper ---
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-let audioContext: AudioContext | null = null;
+// TTS removed to avoid API key dependency for viewing profile
 
-async function playAIVoice(text: string) {
-  try {
-    if (!audioContext) {
-      audioContext = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
-    }
-    
-    if (audioContext.state === 'suspended') {
-      await audioContext.resume();
-    }
-
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-preview-tts",
-      contents: [{ parts: [{ text: `Say in a deep, legendary, epic narrator voice: ${text}` }] }],
-      config: {
-        responseModalities: [Modality.AUDIO],
-        speechConfig: {
-          voiceConfig: {
-            prebuiltVoiceConfig: { voiceName: 'Charon' },
-          },
-        },
-      },
-    });
-
-    const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-    if (!base64Audio) {
-      console.warn("AI Voice: No audio data received (likely quota limit or safety filter). Skipping voice.");
-      return;
-    }
-
-    const audioData = atob(base64Audio);
-    const arrayBuffer = new ArrayBuffer(audioData.length);
-    const view = new Uint8Array(arrayBuffer);
-    for (let i = 0; i < audioData.length; i++) {
-      view[i] = audioData.charCodeAt(i);
-    }
-
-    try {
-      const buffer = await audioContext.decodeAudioData(arrayBuffer);
-      const source = audioContext.createBufferSource();
-      source.buffer = buffer;
-      source.connect(audioContext.destination);
-      source.start(0);
-    } catch (decodeError) {
-      console.warn("AI Voice: Unable to decode audio data. Skipping voice.", decodeError);
-    }
-  } catch (error: any) {
-    // Handle quota errors (429) silently or with a simple warning
-    if (error?.message?.includes('429') || error?.status === 'RESOURCE_EXHAUSTED') {
-      console.warn("AI Voice: Quota exceeded. The intro will continue without narration.");
-    } else {
-      console.warn("AI Voice Error:", error?.message || error);
-    }
-  }
+async function playAIVoice(_text: string) {
+  // Functionality removed
 }
 
 // --- Types ---
