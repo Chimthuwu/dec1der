@@ -27,8 +27,10 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
 
     function resolvePath(path: string) {
       if (!path) return '';
-      // Ensure path starts with / for absolute root-relative resolution in Cloudflare Pages
-      return path.startsWith('/') ? path : '/' + path;
+      // Ensure path starts with / for absolute root-relative resolution
+      const cleanPath = path.startsWith('/') ? path : '/' + path;
+      // Add a cache-busting timestamp to bypass any Cloudflare edge caching for now
+      return `${cleanPath}?v=${Date.now()}`;
     }
 
     function buildCollage(imageUrls: string[]) {
