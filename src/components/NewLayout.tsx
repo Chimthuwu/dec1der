@@ -10,32 +10,21 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
     const collageContainer = collageContainerRef.current;
     if (!collageContainer) return;
 
-    // Added the full list of files from your public/fl/ folder for MAX CHAOS
     const defaultFLImages = [
-      "fl/1.gif", "fl/2.gif", "fl/3.png", "fl/5.gif", "fl/6.gif", "fl/7.gif", "fl/8.gif", "fl/9.gif", "fl/10.gif", "fl/11.gif",
-      "fl/3c0f3e38c41334a48bf30f976fd6a8d8.gif", 
-      "fl/5371b8b4dfe0d0cb90fd183d5d3f86961110525c.gif", 
-      "fl/7be028109172735.5fce415e9b989.png", 
-      "fl/998128a7817eda0ccd650feef29c76a9a96b4a62.gif",
-      "fl/ewtfolylzza41.gif", 
-      "fl/giphy.gif", 
-      "fl/i-turned-all-the-fl-chan-animations-into-loopable-gifs-v0-vpduzuo6pfve1.gif",
-      "fl/kTJ00t.gif", 
-      "fl/synthesizer-modular.gif", 
-      "fl/Zp91BY.gif"
+      "/FL%20STUDIO/3c0f3e38c41334a48bf30f976fd6a8d8.gif",
+      "/FL%20STUDIO/5371b8b4dfe0d0cb90fd183d5d3f86961110525c.gif",
+      "/FL%20STUDIO/7be028109172735.5fce415e9b989.png",
+      "/FL%20STUDIO/998128a7817eda0ccd650feef29c76a9a96b4a62.gif",
+      "/FL%20STUDIO/Zp91BY.gif",
+      "/FL%20STUDIO/ewtfolylzza41.gif",
+      "/FL%20STUDIO/giphy.gif",
+      "/FL%20STUDIO/i-turned-all-the-fl-chan-animations-into-loopable-gifs-v0-vpduzuo6pfve1.gif",
+      "/FL%20STUDIO/kTJ00t.gif",
+      "/FL%20STUDIO/synthesizer-modular.gif"
     ];
-
-    function resolvePath(path: string) {
-      if (!path) return '';
-      // Ensure path starts with / for absolute root-relative resolution
-      const cleanPath = path.startsWith('/') ? path : '/' + path;
-      // Add a cache-busting timestamp to bypass any Cloudflare edge caching for now
-      return `${cleanPath}?v=${Date.now()}`;
-    }
 
     function buildCollage(imageUrls: string[]) {
       if (!collageContainer || imageUrls.length === 0) return;
-      console.log("Building collage with", imageUrls.length, "images");
       collageContainer.innerHTML = ''; // Clear existing
       
       let images = [...imageUrls];
@@ -47,8 +36,8 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
       images.sort(() => Math.random() - 0.5);
       images.slice(0, targetCount).forEach(url => {
         const img = document.createElement('img');
-        img.src = resolvePath(url);
-        img.onerror = () => console.error("Failed to load image:", resolvePath(url));
+        img.src = url;
+        img.referrerPolicy = "no-referrer";
         img.style.animationDelay = (Math.random() * 4) + 's';
         
         // Randomly make some images larger for a "collage" feel
@@ -69,34 +58,27 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
 
     // --- 2. GNOME PFP CYCLER ---
     const gnomes = [
-      "gnome/5.gif", // pain-dank.gif
-      "gnome/1.gif", // 200w.gif
-      "gnome/2.gif", // download.gif
-      "gnome/3.gif", // giphy_2.gif
-      "gnome/4.gif", // ina3hi02spp21.gif
-      "gnome/6.gif"  // tumblr_nabhp30Tmo1tjw4imo1_250.gif
+      "/RUNESCAPEGNOME/pain-dank.gif",
+      "/RUNESCAPEGNOME/200w.gif",
+      "/RUNESCAPEGNOME/download.gif",
+      "/RUNESCAPEGNOME/giphy (2).gif",
+      "/RUNESCAPEGNOME/ina3hi02spp21.gif",
+      "/RUNESCAPEGNOME/tumblr_nabhp30Tmo1tjw4imo1_250.gif"
     ];
     let gnomeIndex = 0;
     let gnomeTimeout: NodeJS.Timeout;
 
     const cycleGnome = () => {
       gnomeIndex = (gnomeIndex + 1) % gnomes.length;
-      if (pfpRef.current) {
-        const url = resolvePath(gnomes[gnomeIndex]);
-        pfpRef.current.src = url;
-      }
+      if (pfpRef.current) pfpRef.current.src = gnomes[gnomeIndex];
       
-      const duration = gnomes[gnomeIndex].includes('5.gif') ? 500 : 7000;
+      const duration = gnomes[gnomeIndex].includes('pain-dank.gif') ? 500 : 7000;
       gnomeTimeout = setTimeout(cycleGnome, duration);
     };
 
-    // Initial timeout should respect the first image (5.gif)
-    const initialDuration = gnomes[0].includes('5.gif') ? 500 : 7000;
+    // Initial timeout should respect the first image (pain-dank.gif)
+    const initialDuration = gnomes[0].includes('pain-dank.gif') ? 500 : 7000;
     gnomeTimeout = setTimeout(cycleGnome, initialDuration);
-
-    if (pfpRef.current) {
-      pfpRef.current.src = resolvePath(gnomes[0]);
-    }
 
     // --- 4. KONAMI CODE ---
     const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
@@ -135,19 +117,7 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
 
           {/* GNOME CYCLING PFP */}
           <div className="w-64 h-64 mb-6 pfp rounded-3xl overflow-hidden bg-black relative group">
-            <img 
-              ref={pfpRef} 
-              id="gnome-pfp" 
-              src="/gnome/5.gif" 
-              className="w-full h-full object-cover" 
-              onError={(e) => {
-                console.error("Failed to load PFP:", (e.target as HTMLImageElement).src);
-                // Try fallback to absolute path if relative fails
-                if (!(e.target as HTMLImageElement).src.includes(window.location.origin)) {
-                   (e.target as HTMLImageElement).src = window.location.origin + "/gnome/5.gif";
-                }
-              }}
-            />
+            <img ref={pfpRef} id="gnome-pfp" src="/RUNESCAPEGNOME/pain-dank.gif" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-black bg-opacity-80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-crosshair">
               <p className="text-[10px] text-center text-[#0f0] leading-loose">↑ ↑ ↓ ↓<br />← → ← →<br />B A</p>
             </div>
@@ -164,16 +134,10 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
           <a href="https://www.youtube.com/@deciderosrs" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center">
             <span className="text-6xl mb-4">🪓</span>
             <h2 className="text-2xl font-black">OSRS CLIPS</h2>
-            <p className="text-[9px] mt-2 text-[#0f0]">NO MERCY FOR STOOGES</p>
+            <p className="text-[9px] mt-2 text-[#0f0]">NO STOOGES ALLOWED</p>
           </a>
           <a href="https://open.spotify.com/artist/0epG7kZFRpxaRchGf6p5yE" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center"><span className="text-6xl mb-4">🎵</span><h2 className="text-2xl font-black">SPOTIFY</h2></a>
           <a href="https://dec1der.bandcamp.com/" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center"><span className="text-6xl mb-4">💿</span><h2 className="text-2xl font-black">BANDCAMP</h2></a>
-          <a href="https://www.instagram.com/thedec1der/" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center"><span className="text-6xl mb-4">📷</span><h2 className="text-2xl font-black">INSTAGRAM</h2></a>
-          <a href="https://store.steampowered.com/app/2781990/Hell_On_Earth/" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center">
-            <span className="text-6xl mb-4">🔥</span>
-            <h2 className="text-2xl font-black">HELL ON EARTH</h2>
-            <p className="text-[9px] mt-2 text-[#0f0]">SOUND DESIGN BY DEC1DER</p>
-          </a>
           <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noreferrer" className="neo-card p-8 flex flex-col items-center text-center md:col-span-2 bg-[#111]" style={{borderColor: '#ec4899', boxShadow: '10px 10px 0 #ec4899'}}>
             <span className="text-6xl mb-4">📸</span>
             <h2 className="text-2xl font-black text-pink-500">ONLYFANS</h2>

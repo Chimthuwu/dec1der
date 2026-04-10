@@ -6,19 +6,11 @@ import { Stars, Float, Text, Environment, Sparkles } from "@react-three/drei";
 import { GoogleGenAI, Modality } from "@google/genai";
 
 // --- AI Voice Helper ---
-let ai: GoogleGenAI | null = null;
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 let audioContext: AudioContext | null = null;
 
 async function playAIVoice(text: string) {
   try {
-    if (!ai) {
-      if (!process.env.GEMINI_API_KEY) {
-        console.warn("AI Voice: No GEMINI_API_KEY provided. Skipping voice.");
-        return;
-      }
-      ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-    }
-
     if (!audioContext) {
       audioContext = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
     }
