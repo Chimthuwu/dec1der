@@ -11,16 +11,16 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
     if (!collageContainer) return;
 
     const defaultFLImages = [
-      "fl-studio/3c0f3e38c41334a48bf30f976fd6a8d8.gif",
-      "fl-studio/5371b8b4dfe0d0cb90fd183d5d3f86961110525c.gif",
-      "fl-studio/fl-logo.png",
-      "fl-studio/998128a7817eda0ccd650feef29c76a9a96b4a62.gif",
-      "fl-studio/zp91by.gif",
-      "fl-studio/ewtfolylzza41.gif",
-      "fl-studio/giphy.gif",
-      "fl-studio/fl-chan.gif",
-      "fl-studio/ktj00t.gif",
-      "fl-studio/synthesizer-modular.gif"
+      "/fl-studio/3c0f3e38c41334a48bf30f976fd6a8d8.gif",
+      "/fl-studio/5371b8b4dfe0d0cb90fd183d5d3f86961110525c.gif",
+      "/fl-studio/fl-logo.png",
+      "/fl-studio/998128a7817eda0ccd650feef29c76a9a96b4a62.gif",
+      "/fl-studio/zp91by.gif",
+      "/fl-studio/ewtfolylzza41.gif",
+      "/fl-studio/giphy.gif",
+      "/fl-studio/fl-chan.gif",
+      "/fl-studio/ktj00t.gif",
+      "/fl-studio/synthesizer-modular.gif"
     ];
 
     function buildCollage(imageUrls: string[]) {
@@ -57,12 +57,12 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
 
     // --- 2. GNOME PFP CYCLER ---
     const gnomes = [
-      "runescape-gnome/pain-dank.gif",
-      "runescape-gnome/200w.gif",
-      "runescape-gnome/download.gif",
-      "runescape-gnome/giphy-2.gif",
-      "runescape-gnome/ina3hi02spp21.gif",
-      "runescape-gnome/tumblr_nabhp30tmo1tjw4imo1_250.gif"
+      "/runescape-gnome/pain-dank.gif",
+      "/runescape-gnome/200w.gif",
+      "/runescape-gnome/download.gif",
+      "/runescape-gnome/giphy-2.gif",
+      "/runescape-gnome/ina3hi02spp21.gif",
+      "/runescape-gnome/tumblr_nabhp30tmo1tjw4imo1_250.gif"
     ];
     let gnomeIndex = 0;
     let gnomeTimeout: NodeJS.Timeout;
@@ -116,7 +116,7 @@ export default function NewLayout({ onReplayIntro }: { onReplayIntro: () => void
 
           {/* GNOME CYCLING PFP */}
           <div className="w-64 h-64 mb-6 pfp rounded-3xl overflow-hidden bg-black relative group">
-            <img ref={pfpRef} id="gnome-pfp" src="runescape-gnome/pain-dank.gif" className="w-full h-full object-cover" />
+            <img ref={pfpRef} id="gnome-pfp" src="/runescape-gnome/pain-dank.gif" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-black bg-opacity-80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-crosshair">
               <p className="text-[10px] text-center text-[#0f0] leading-loose">↑ ↑ ↓ ↓<br />← → ← →<br />B A</p>
             </div>
